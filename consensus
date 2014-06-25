@@ -1,0 +1,25 @@
+from Bio import AlignIO
+from Bio.Align import AlignInfo
+from Bio.Alphabet import IUPAC, Gapped
+alphabet = Gapped(IUPAC.ambiguous_dna)
+
+alignment = AlignIO.read(open("rosalind.fasta"), "fasta")
+summary_align = AlignInfo.SummaryInfo(alignment)
+consensus = summary_align.dumb_consensus(threshold = 0, ambiguous = 'N')
+
+my_pssm = summary_align.pos_specific_score_matrix(consensus)
+
+print consensus
+												  
+Astr = [str(int(x["A"])) for x in my_pssm]
+Cstr = [str(int(x["C"])) for x in my_pssm]
+Gstr = [str(int(x["G"])) for x in my_pssm]
+Tstr = [str(int(x["T"])) for x in my_pssm]
+
+f = open('myfile.txt','w')
+f.write('%s \n' % consensus)
+f.write("A: " + ' '.join(Astr) + '\n') # python will convert \n to os.linesep
+f.write("C: " + ' '.join(Cstr) + '\n') # python will convert \n to os.linesep
+f.write("G: " + ' '.join(Gstr) + '\n') # python will convert \n to os.linesep
+f.write("T: " + ' '.join(Tstr) + '\n') # python will convert \n to os.linesep
+f.close() # you can omit in most cases as the destructor will call if
