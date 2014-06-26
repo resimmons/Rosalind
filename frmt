@@ -1,0 +1,14 @@
+from Bio import Entrez
+from Bio import SeqIO
+Entrez.email = "resimmons@gmail.com"
+
+"""Get input into a query string for Entrez"""
+input = 'JX295575 JF927157 JX393321 JX914595 JQ796071 JX460804 JQ290344 JQ712982'
+query = ', '.join(input.split(' '))
+
+"""Query Entrez for the input records"""
+handle = Entrez.efetch(db="nucleotide", id=query, rettype="fasta")
+records = list(SeqIO.parse(handle, 'fasta'))
+
+"""Print the shortest record in fasta format"""
+print min(records).format('fasta')
