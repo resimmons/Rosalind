@@ -1,0 +1,15 @@
+"""Get Gene Ontologies from a selected SwissProt accession #"""
+
+from Bio import ExPASy
+from Bio import SwissProt
+
+prot_name = 'P20827'
+
+handle = ExPASy.get_sprot_raw(prot_name)
+record = SwissProt.read(handle)
+CR = record.cross_references
+
+
+for group in CR:
+	if group[0] == 'GO' and group[2].startswith('P:'):
+		print group[2][2:]
