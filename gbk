@@ -1,0 +1,19 @@
+from Bio import Entrez
+Entrez.email = "resimmons@gmail.com"
+
+org = 'Chroomonas'
+start = '2001/10/31'
+end = '2008/07/20'
+
+query = '%s[Organism] AND %s[Publication date]: %s[Publication Date]' % (org, start, end)
+
+
+handle = Entrez.esearch(db="nucleotide", term=query)
+record = Entrez.read(handle)
+record["Count"]
+
+print record["Count"]
+
+
+
+
