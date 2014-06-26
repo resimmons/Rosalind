@@ -1,0 +1,10 @@
+from Bio import SeqIO
+
+count = 0
+handle = open('Rosalind.fasta', 'rU')
+for record in SeqIO.parse(handle, 'fasta'):
+	if str(record.seq) == str(record.seq.reverse_complement()):
+		count += 1
+handle.close()
+
+print count
