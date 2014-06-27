@@ -1,0 +1,1 @@
+java -classpath /Users/Rachel/Desktop/Trimmomatic-0.32/Trimmomatic-0.32.jar org.usadellab.trimmomatic.TrimmomaticSE -phred33 /Users/Rachel/Desktop/Trimmomatic-0.32/Rosalind.txt output.txt LEADING:20 TRAILING:20
