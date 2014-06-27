@@ -1,0 +1,6 @@
+from Bio import SeqIO
+data = SeqIO.parse(open("Rosalind.fasta"), "fastq")
+outfile = open('workfile.txt', 'w')
+
+for entry in data:
+	SeqIO.write(entry, outfile, "fasta")
