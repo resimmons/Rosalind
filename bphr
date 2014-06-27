@@ -1,0 +1,24 @@
+from Bio import SeqIO
+from numpy import mean
+from numpy import array
+
+data = SeqIO.parse('Rosalind.txt', format='fastq')
+threshold = 23
+
+count = 0
+allscores = list()
+meanscores = []
+
+for record in data:
+	allscores.append(record.letter_annotations['phred_quality'])
+
+allscores = array(allscores)
+meanscores = mean(allscores,axis=0)
+
+print meanscores
+
+for value in meanscores:
+	if value < threshold:
+		count += 1
+		
+print count
