@@ -1,0 +1,24 @@
+from Bio import Seq
+
+string = 'AGCCATGTAGCTAACTCAGGTTACATGGGGATGACCCCGCGACTTGGATTAGAGTCTCTTTTGGAATAAGCCTGAATGATCCGAGTAGCATCTCAG'
+data = Seq.transcribe(string)
+rc = Seq.reverse_complement(data)
+ORFs = list()
+
+def TrimToFit(seq):
+	"""Trims off end up a sequence to a whole number of codons"""
+	if len(seq) % 3 == 1:
+		return seq[:-1]
+	elif len(seq) % 3 == 2:
+		return seq[:-2]
+	else:
+		return seq
+
+for item in range(len(data)):
+    if data[item].startswith('AUG'):
+		ORFs.append(Seq.translate(TrimToFit(data[item:]), table = 1, to_stop=True))
+for item in range(len(rc)):
+	if rc[item:int(item)+3].startswith('AUG'):
+		ORFs.append(Seq.translate(TrimToFit(rc[item:]), table = 1, to_stop=True))
+
+print max(ORFs, key=len)
