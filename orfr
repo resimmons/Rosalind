@@ -39,5 +39,4 @@ for match in re.finditer('ATG', str(rc)):
 		ORFs.append(Seq.translate(TrimToFit(rc[match.start():]), to_stop=True))
 
 ORFs = set(ORFs)
-for item in ORFs:
-	print item
+print max(ORFs, key=len)
