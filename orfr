@@ -1,12 +1,29 @@
 from Bio import Seq
+import re
 
-string = 'AGCCATGTAGCTAACTCAGGTTACATGGGGATGACCCCGCGACTTGGATTAGAGTCTCTTTTGGAATAAGCCTGAATGATCCGAGTAGCATCTCAG'
-data = Seq.transcribe(string)
+data = '''GATATATGAGGGAGCTTCGGGGCTAACGGGTACGTTATGCTCCCGATTGTACATTTAGTA
+AACTACCCGAACCAAGGTGGCTTTTTGTCGTCCAGAGAATCAGTCCTTCACTACGTGCGG
+AGAGCGTGAACATGTTTACCATGGATATCGCACATCCGTGTACGACGATCCCTCGTTAAG
+GTTCTTATCACTCATCAGGAAACTATCTCCCAGCGTGTCTCCTCTCTGTATTAAGAGGGT
+CGGCTATGTTTGTTTCTTTTCCTAGAGGACGATTTCTTGGCGAATAAAAAATCGCAGAAC
+TGGCACTTGAAGATTGAGGTGTCACTAGTCCCAACCTCTGTCCTGCTCGACCAGGCTAGC
+GAGTAGACATTCTCTTACATTCACGGTAGACATCTCTCAGGGCACGTCCATTGATGGAAA
+CGATCAACTTGAACTATACCTAGCTAGGTATAGTTCAAGTTGATCGTTTCCATACAGGTT
+ACAGCTACGTTGGCCCCAAAGAAACCAAGTATAGGTATAACTCCCACTAATGTAAAATAC
+GAGGTCTTTTCACGTTCACGCCGTCATGTAGCTCGTCAGGATTAACCGACGACACCCCAC
+CTCGTGTTGTGTCCTACAAACCTTGATCGATCGACTGTTAGTACACTGTGTCCAGAACGG
+AGTATAATTGCTTACTAAGGAACTCCTCGAGAGCGCATACGCCCCGCACAGCCAGGTCAA
+TGTCCGAGATGCTATTCTGGTATAGGCCTCGGAATGCCTGCTGGTTTTTCTCCTGCCACT
+TGCGACGAAGGATTTGCTGTGCCGTCCCTGCACTACCACGCACCGTCCATGGTCGAGCTC
+GAGTACATCTTCTGATGCGCGTACCATCGGCGTGACTCTCCATAAG'''
+
+data = ''.join(data.split())
 rc = Seq.reverse_complement(data)
 ORFs = list()
 
+
 def TrimToFit(seq):
-	"""Trims off end up a sequence to a whole number of codons"""
+	"""Trims off end of a sequence to a whole number of codons"""
 	if len(seq) % 3 == 1:
 		return seq[:-1]
 	elif len(seq) % 3 == 2:
@@ -14,11 +31,13 @@ def TrimToFit(seq):
 	else:
 		return seq
 
-for item in range(len(data)):
-    if data[item].startswith('AUG'):
-		ORFs.append(Seq.translate(TrimToFit(data[item:]), table = 1, to_stop=True))
-for item in range(len(rc)):
-	if rc[item:int(item)+3].startswith('AUG'):
-		ORFs.append(Seq.translate(TrimToFit(rc[item:]), table = 1, to_stop=True))
+for match in re.finditer('ATG', str(data)):
+	if '*' in Seq.translate(TrimToFit(data[match.start():])):
+		ORFs.append(Seq.translate(TrimToFit(data[match.start():]), to_stop=True))
+for match in re.finditer('ATG', str(rc)):
+	if '*' in Seq.translate(TrimToFit(rc[match.start():])):
+		ORFs.append(Seq.translate(TrimToFit(rc[match.start():]), to_stop=True))
 
-print max(ORFs, key=len)
+ORFs = set(ORFs)
+for item in ORFs:
+	print item
