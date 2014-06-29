@@ -1,0 +1,18 @@
+from Bio import Entrez
+from Bio import Seq
+from Bio import SeqIO
+Entrez.email = "resimmons@gmail.com"
+
+"""Get input into a query string for Entrez"""
+input = 'Q5U1Y9 O14977'
+query = ', '.join(input.split(' '))
+
+"""Query Entrez for the input records"""
+handle = Entrez.efetch(db="protein", id=query, rettype="fasta")
+records = list(SeqIO.parse(handle, 'fasta'))
+
+"""Print the two sequences to dump into NEEDLE"""
+outfile = open("outfile.txt", "w")
+outfile.write(str(records[0].seq)+'\n')
+outfile.write('')
+outfile.write(str(records[1].seq))
