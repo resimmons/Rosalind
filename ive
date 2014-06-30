@@ -1,0 +1,15 @@
+input = '18363 16544 18608 17078 19610 18423'
+input = input.split()
+AAAA = int(input[0])
+AAAa = int(input[1])
+AAaa = int(input[2])
+AaAa = int(input[3])
+Aaaa = int(input[4])
+aaaa = int(input[5])
+
+total = float(AAAA + AAAa + AAaa + AaAa + Aaaa + aaaa)
+
+#pr aaaa or 1/2pr Aaaa or 1/4pr AaAa
+probA = AAAA/total + AAAa/total + AAaa/total + AaAa*3/(4*total) + Aaaa/(2*total)
+
+print probA * total * 2
