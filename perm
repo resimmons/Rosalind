@@ -1,0 +1,15 @@
+from scipy.misc import factorial
+import itertools
+
+input = 7
+order = []
+outfile = open('outfile.txt', 'w')
+
+for i in range(input):
+	order.append(str(i+1))
+
+outfile.write(str(factorial(input)) + '\n')
+
+for combo in list(itertools.permutations(order)):
+	outfile.write(' '.join(combo) + '\n')
+
