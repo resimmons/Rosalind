@@ -1,0 +1,26 @@
+import re, urllib2
+
+IDs = '''A2Z669
+B5ZC00
+P07204_TRBM_HUMAN
+P20840_SAG1_YEAST'''.split()
+
+prots = []
+
+for ID in IDs:
+	ID_html = 'http://www.uniprot.org/uniprot/' + ID + '.fasta'
+	f = urllib2.urlopen(ID_html)
+	seq = f.read().split('\n')[1:-1]
+	seq = ''.join(seq)
+	prots.append( (ID, seq) )
+
+def find_motif(s):
+	cols = []
+	for motif in re.finditer('(?=(N[^P][ST][^P]))', s):
+		cols.append(motif.start() + 1)
+	return cols
+
+for ID, seq in prots:
+	cols = find_motif(seq)
+	if cols:
+		print ID + '\n' + ' '.join(str(hit) for hit in cols)
