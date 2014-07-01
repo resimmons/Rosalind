@@ -1,0 +1,16 @@
+from Bio import SeqIO
+
+def OGraph(fasta, n):
+	results = []
+	records = [(item.id, item.seq) for item in input]
+
+	for id1, seq1 in records:
+		for id2, seq2 in records:
+			if id1 != id2 and seq1.endswith(seq2[:n]):
+				results.append((id1, id2))
+	return results
+
+input = SeqIO.parse('rosalind.txt', 'fasta')
+
+for edge in OGraph(input, 3):
+	print edge[0], edge[1]
