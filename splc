@@ -1,0 +1,17 @@
+from Bio import SeqIO
+from Bio import Seq
+import re
+
+input = SeqIO.parse('Rosalind.txt', 'fasta')
+data = []
+for item in input:
+	data.append( (str(item.id), str(item.seq)) )
+
+dna = data.pop(0)
+dna = str(dna[1])
+
+for ID, intron in data:
+	for match in re.finditer(intron, dna):
+		dna = dna.replace(dna[match.start():match.end()],'')
+
+print Seq.translate(dna, to_stop=True)
