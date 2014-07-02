@@ -1,0 +1,6 @@
+from scipy import misc
+
+n = 87
+k = 9
+
+print misc.factorial(n) / misc.factorial(n - k) % 1000000
