@@ -1,0 +1,46 @@
+from Bio import SeqIO
+from Bio import Seq
+import itertools
+
+input = SeqIO.parse('rosalind.txt', 'fasta')
+data = [str(item.seq) for item in input]
+
+def GetGoodSeqs(reads):
+	
+	goodseqs = []
+	for item in itertools.combinations(reads, 2):
+		if item[0] == item[1]:
+			goodseqs.append(item[0])
+		if Seq.reverse_complement(item[0]) == item[1]:
+			goodseqs.append(item[0])
+
+	for item in range(len(goodseqs)):
+		goodseqs.append(Seq.reverse_complement(goodseqs[item]))
+	
+	goodseqs = set(goodseqs)
+	return goodseqs
+
+def Score(seq1, seq2):
+
+	score = [0, 0]
+
+	for pos in range(len(seq1)):
+
+		if seq1[pos] != seq2[pos]:
+			score[0] += 1
+		
+		if Seq.reverse_complement(seq1[pos]) != seq2[pos]:
+			score[1] += 1
+	
+	return min(score)
+
+def FixErrors(bad, good):
+	for badseq in bad:
+		for goodseq in good:
+			if Score(badseq, goodseq) == 1:
+				print badseq + '->' + goodseq
+	
+goodseqs = GetGoodSeqs(data)	
+badseqs = [item for item in data if item not in goodseqs]
+
+FixErrors(badseqs, goodseqs)
