@@ -1,0 +1,30 @@
+from Bio import SeqIO
+
+input = SeqIO.parse('rosalind.txt', 'fasta')
+seqs = [str(item.seq) for item in input]
+
+tstvtable = {('TC'): 'ts',
+('CT'): 'ts',
+('AG'): 'ts',
+('GA'): 'ts',
+('CG'): 'tv',
+('GC'): 'tv',
+('AT'): 'tv',
+('TA'): 'tv',
+('TG'): 'tv',
+('GT'): 'tv',
+('AC'): 'tv',
+('CA'): 'tv'
+}
+		
+ts = 0.0
+tv = 0.0
+
+for col in range(len(seqs[0])):
+	if seqs[0][col] != seqs[1][col]:
+		if tstvtable[str(seqs[0][col] + seqs[1][col])] == 'ts':
+			ts += 1
+		if tstvtable[str(seqs[0][col] + seqs[1][col])] == 'tv':
+			tv += 1
+
+print ts / tv
