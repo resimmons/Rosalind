@@ -1,0 +1,24 @@
+from Bio import SeqIO
+
+def find_overlaps(array, query=''):
+    if len(array) == 0:
+        return query
+    elif len(query) == 0:
+        query = array.pop(0)
+        return find_overlaps(array, query)
+    else:
+        for i in range(len(array)):
+            a = array[i]
+            l = len(a)
+            for p in range(l / 2):
+                q = l - p
+                if query.startswith(a[p:]):
+                    array.pop(i)
+                    return find_overlaps(array, a[:p] + query)
+                if query.endswith(a[:q]):
+                    array.pop(i)
+                    return find_overlaps(array, query + a[q:])
+
+data = [str(item.seq) for item in SeqIO.parse(open('rosalind.txt'), 'fasta')]
+outfile = open('outfile.txt', 'w')
+outfile.write(find_overlaps(list(data)))
